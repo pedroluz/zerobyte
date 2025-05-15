@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Envie sua mensagem para as autoridades</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary: #10b981;
+            --dark: #1e293b;
+            --light: #f8fafc;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transform: translateY(0);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            animation: rotate 20s linear infinite;
+            z-index: 1;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+        
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .recipient-group {
+            background: #f8fafc;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .recipient-group-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+        }
+        
+        .recipient-group-title {
+            font-weight: 600;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+        }
+        
+        .recipient-group-title svg {
+            margin-right: 0.5rem;
+            color: var(--primary);
+        }
+        
+        .select-all {
+            color: var(--primary);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        
+        .select-all:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+        
+        .recipient-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 0.75rem;
+        }
+        
+        .recipient-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .recipient-item input {
+            width: auto;
+            margin-right: 0.5rem;
+        }
+        
+        .recipient-item label {
+            margin-bottom: 0;
+            font-weight: 400;
+            cursor: pointer;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.875rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+        
+        .btn-lg {
+            padding: 1rem 2.5rem;
+            font-size: 1.125rem;
+        }
+        
+        .btn-block {
+            display: flex;
+            width: 100%;
+        }
+        
+        .btn svg {
+            margin-right: 0.5rem;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .recipient-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="max-w-4xl mx-auto">
+        <div class="card">
+            <div class="header">
+                <h1>Envie sua mensagem para as autoridades</h1>
+                <p>Preencha o formulário e envie diretamente para os órgãos competentes</p>
+            </div>
+            
+            <div class="p-6 md:p-8">
+                <form id="emailForm">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="form-group">
+                            <label for="name">Seu nome</label>
+                            <input type="text" id="name" placeholder="Digite seu nome completo" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Seu e-mail</label>
+                            <input type="email" id="email" placeholder="seu@email.com" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">Assunto</label>
+                        <input type="text" id="subject" placeholder="Sobre o que deseja falar?" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Mensagem</label>
+                        <textarea id="message" placeholder="Escreva sua mensagem aqui..." required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Destinatários</label>
+                        
+                        <!-- Vereadores -->
+                        <div class="recipient-group">
+                            <div class="recipient-group-header">
+                                <div class="recipient-group-title">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                                    </svg>
+                                    Vereadores
+                                </div>
+                                <div class="select-all" onclick="toggleAll('vereadores')">Selecionar todos</div>
+                            </div>
+                            <div class="recipient-list" id="vereadores">
+                                <div class="recipient-item">
+                                    <input type="checkbox" id="vereador1" value="vereador1@cidade.gov.br">
+                                    <label for="vereador1">Vereador João Silva</label>
+                                </div>
+                                <div class="recipient-item">
+                                    <input type="checkbox" id="vereador2" value="vereador2@cidade.gov.br">
+                                    <label for="vereador2">Vereadora Maria Souza</label>
+                                </div>
+                                <div class="recipient-item">
+                                    <input type="checkbox" id="vereador3" value="vereador3@cidade.gov.br">
+                                    <label for="vereador3">Vereador Carlos Oliveira</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Secretarias -->
+                        <div class="recipient-group">
+                            <div class="recipient-group-header">
+                                <div class="recipient-group-title">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78 3.434 1.467a1 1 0 00.787 0l4-1.714v3.133a11.052 11.052 0 01-3.628 1.852 1 1 0 01-1.11-.407L9.3 16.573z" />
+                                    </svg>
+                                    Secretarias
+                                </div>
+                                <div class="select-all" onclick="toggleAll('secretarias')">Selecionar todos</div>
+                            </div>
+                            <div class="recipient-list" id="secretarias">
+                                <div class="recipient-item">
+                                    <input type="checkbox" id="secretaria1" value="obras@cidade.gov.br">
+                                    <label for="secretaria1">Secretaria de Obras</label>
+                                </div>
+                                <div class="recipient-item">
+                                    <input type="checkbox" id="secretaria2" value="meioambiente@cidade.gov.br">
+                                    <label for="secretaria2">Secretaria de Meio Ambiente</label>
+                                </div>
+                                <div class="recipient-item">
+                                    <input type="checkbox" id="secretaria3" value="saude@cidade.gov.br">
+                                    <label for="secretaria3">Secretaria de Saúde</label>
+                                </div>
+                                <div class="recipient-item">
+                                    <input type="checkbox" id="secretaria4" value="educacao@cidade.gov.br">
+                                    <label for="secretaria4">Secretaria de Educação</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Ministério Público -->
+                        <div class="recipient-group">
+                            <div class="recipient-group-header">
+                                <div class="recipient-group-title">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clip-rule="evenodd" />
+                                        <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
+                                    </svg>
+                                    Ministério Público
+                                </div>
+                                <div class="select-all" onclick="toggleAll('mp')">Selecionar todos</div>
+                            </div>
+                            <div class="recipient-list" id="mp">
+                                <div class="recipient-item">
+                                    <input type="checkbox" id="mp1" value="denuncia@mpf.gov.br">
+                                    <label for="mp1">Denúncias</label>
+                                </div>
+                                <div class="recipient-item">
+                                    <input type="checkbox" id="mp2" value="ouvidoria@mpf.gov.br">
+                                    <label for="mp2">Ouvidoria</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block pulse">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                            </svg>
+                            Abrir e-mail
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Seu e-mail será aberto no seu cliente de e-mail padrão. Nenhum dado é armazenado neste site.</p>
+        </div>
+    </div>
+    
+    <script>
+        // Função para selecionar/deselecionar todos os checkboxes de um grupo
+        function toggleAll(groupId) {
+            const container = document.getElementById(groupId);
+            const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+            const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+            
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = !allChecked;
+            });
+        }
+        
+        // Função principal para gerar o link mailto:
+        document.getElementById('emailForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Obter valores do formulário
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            // Obter destinatários selecionados
+            const recipients = [];
+            document.querySelectorAll('.recipient-list input[type="checkbox"]:checked').forEach(checkbox => {
+                recipients.push(checkbox.value);
+            });
+            
+            // Validar campos obrigatórios
+            if (!message || recipients.length === 0) {
+                alert('Por favor, preencha a mensagem e selecione pelo menos um destinatário.');
+                return;
+            }
+            
+            // Montar o corpo do e-mail
+            const emailBody = `Olá,\n\n${message}\n\nAtenciosamente,\n${name}\n${email}`;
+            
+            // Codificar os parâmetros para URL
+            const encodedSubject = encodeURIComponent(subject);
+            const encodedBody = encodeURIComponent(emailBody);
+            const encodedRecipients = recipients.join(',');
+            
+            // Criar o link mailto:
+            const mailtoLink = `mailto:${encodedRecipients}?subject=${encodedSubject}&body=${encodedBody}`;
+            
+            // Abrir o cliente de e-mail
+            window.location.href = mailtoLink;
+        });
+        
+        // Animação para os grupos de destinatários
+        document.querySelectorAll('.recipient-group-header').forEach(header => {
+            header.addEventListener('click', function() {
+                const group = this.parentElement;
+                const list = group.querySelector('.recipient-list');
+                
+                if (list.style.display === 'none') {
+                    list.style.display = 'grid';
+                    group.style.borderBottomLeftRadius = '0.5rem';
+                    group.style.borderBottomRightRadius = '0.5rem';
+                } else {
+                    list.style.display = 'none';
+                    group.style.borderBottomLeftRadius = '0';
+                    group.style.borderBottomRightRadius = '0';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
